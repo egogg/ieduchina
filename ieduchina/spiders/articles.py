@@ -29,7 +29,7 @@ class ArticlesSpider(CrawlSpider):
 	opts = webdriver.FirefoxOptions()
 	opts.add_argument("--headless")
 	browser = webdriver.Firefox(firefox_options = opts)
-	browser.set_page_load_timeout(self.timeout)
+	browser.set_page_load_timeout(timeout)
 
 	def __init__(self, interval = '30', repeat = '1', timeout = '10', *args, **kwargs):
 		super(ArticlesSpider, self).__init__(*args, **kwargs)
@@ -49,18 +49,16 @@ class ArticlesSpider(CrawlSpider):
 					pc_link = 'http://' + url_base
 					print('    visiting: ' + pc_link)
 					self.browser.get(pc_link)
-				except Exception as e:
+				finally:
 					self.browser.close()
-					pass
 				sleep(self.interval)
 
 				try:
 					m_link = 'http://m.' + url_base
 					print('    visiting: ' + m_link)
 					self.browser.get(m_link)
-				except Exception as e:
+				finally:
 					self.browser.close()
-					pass
 				sleep(self.interval)
 		
 	parse_start_url = parse_item
