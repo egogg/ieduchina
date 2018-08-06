@@ -33,7 +33,7 @@ class ArticlesSpider(CrawlSpider):
 		print('[*] ' + response.url)
 		interval = int(getattr(self, 'interval', '30'))
 		repeat = int(getattr(self, 'repeat', '1'))
-		repeat_interval = intval(getattr(self, 'rinterval', '5'))
+		repeat_interval = int(getattr(self, 'rinterval', '5'))
 		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		for a in item_links:
 			try:
