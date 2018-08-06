@@ -29,14 +29,15 @@ class ArticlesSpider(CrawlSpider):
 	opts = webdriver.FirefoxOptions()
 	opts.add_argument("--headless")
 	browser = webdriver.Firefox(firefox_options = opts)
-	browser.set_page_load_timeout(timeout)
 
 	def __init__(self, interval = '30', repeat = '1', timeout = '10', *args, **kwargs):
 		super(ArticlesSpider, self).__init__(*args, **kwargs)
 		self.interval = int(interval)
 		self.repeat = int(repeat)
 		self.timeout = int(timeout)
+
 		self.start_urls = self.start_urls * self.repeat
+		self.browser.set_page_load_timeout(self.timeout)
 
 	def parse_item(self, response):
 		print('[*] ' + response.url)
