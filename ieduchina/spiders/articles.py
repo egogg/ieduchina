@@ -25,7 +25,7 @@ class ArticlesSpider(CrawlSpider):
 			callback="parse_item",
 			follow=True),)
 
-	opts = FirefoxOptions()
+	opts = webdriver.FirefoxOptions()
 	opts.add_argument("--headless")
 	browser = webdriver.Firefox(firefox_options = opts)
 
