@@ -32,17 +32,23 @@ class ArticlesSpider(CrawlSpider):
 	def parse_item(self, response):
 		print('[*] ' + response.url)
 		interval = int(getattr(self, 'interval', '30'))
+		repeat = int(getattr(self, 'repeat', '1'))
+		repeat_interval = intval(getattr(self, 'rinterval', '5'))
 		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		for a in item_links:
 			try:
 				pc_link = 'http://' + a[2:]
-				print('    visiting: ' + pc_link)
-				self.browser.get(pc_link)
+				for i in xrange(1, repeat):
+					print('    visiting(' + i + '): ' + pc_link)
+					self.browser.get(pc_link)
+					sleep(repeat_interval)
 				sleep(interval)
 
 				m_link = 'http://m.' + a[2:]
-				print('    visiting: ' + m_link)
-				self.browser.get(m_link)
+				for i in xrange(1, repeat):
+					print('    visiting(' + i + '): ' + m_link)
+					self.browser.get(m_link)
+					sleep(repeat_interval)
 				sleep(interval)
 			except Exception as e:
 				pass
