@@ -25,10 +25,6 @@ class ArticlesSpider(CrawlSpider):
 			callback="parse_item",
 			follow=True),)
 
-	def parse(self,response):
-        print getattr(self,'category','')
-        print getattr(self,'domain','')
-
 	def parse_item(self, response):
 		print('[*] ' + response.url)
 		interval = int(getattr(self, 'interval', '30'))
