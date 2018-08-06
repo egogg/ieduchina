@@ -20,9 +20,6 @@ class ArticlesSpider(CrawlSpider):
 		'http://www.ieduchina.com/home/3652.html'
 	]
 
-	repeat = int(getattr(self, 'repeat', '1'))
-	start_urls = start_urls * repeat
-
 	rules = (
 		Rule(LinkExtractor(allow=(), restrict_xpaths=('//*[@id="pages"]/a[last()]',)),
 			callback="parse_item",
