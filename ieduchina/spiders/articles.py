@@ -25,13 +25,18 @@ class ArticlesSpider(CrawlSpider):
 			callback="parse_item",
 			follow=True),)
 
+	def parse(self,response):
+        print getattr(self,'category','')
+        print getattr(self,'domain','')
+
 	def parse_item(self, response):
 		print('[*] ' + response.url)
+		interval = int(getattr(self, 'interval', '30'))
 		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		for a in item_links:
 			print('    visiting: ' + a[2:])
-			sleep(30)
+			sleep(interval)
 			print('    visiting: ' + 'm.' + a[2:])
-			sleep(30)
+			sleep(interval)
 		
 	parse_start_url = parse_item
