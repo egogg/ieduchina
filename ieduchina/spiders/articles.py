@@ -25,7 +25,9 @@ class ArticlesSpider(CrawlSpider):
 			callback="parse_item",
 			follow=True),)
 
-	browser = webdriver.Firefox()
+	opts = FirefoxOptions()
+	opts.add_argument("--headless")
+	browser = webdriver.Firefox(firefox_options = opts)
 
 	def parse_item(self, response):
 		print('[*] ' + response.url)
