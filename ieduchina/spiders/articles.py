@@ -6,7 +6,6 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import re
-import os
 from selenium import webdriver
 from time import sleep
 
@@ -25,6 +24,8 @@ class ArticlesSpider(CrawlSpider):
 			callback="parse_item",
 			follow=True),)
 
+	url_pattern = re.compile(r'^(\/\/www\.|\/\/)(.*)')
+
 	opts = webdriver.FirefoxOptions()
 	opts.add_argument("--headless")
 	browser = webdriver.Firefox(firefox_options = opts)
@@ -39,17 +40,20 @@ class ArticlesSpider(CrawlSpider):
 		print('[*] ' + response.url)
 		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		for a in item_links:
-			try:
-				pc_link = 'http://' + a[2:]
-				print('    visiting: ' + pc_link)
-				self.browser.get(pc_link)
-				sleep(self.interval)
+			m = self.url_pattern.search(a)
+			if m :
+				url_base = m.group(2)
+				try:
+					pc_link = 'http://' + url_base
+					print('    visiting: ' + pc_link)
+					# self.browser.get(pc_link)
+					sleep(self.interval)
 
-				m_link = 'http://m.' + a[2:]
-				print('    visiting: ' + m_link)
-				self.browser.get(m_link)
-				sleep(self.interval)
-			except Exception as e:
-				pass
+					m_link = 'http://m.' + url_base
+					print('    visiting: ' + m_link)
+					# self.browser.get(m_link)
+					sleep(self.interval)
+				except Exception as e:
+					pass
 		
 	parse_start_url = parse_item
