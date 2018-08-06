@@ -50,16 +50,16 @@ class ArticlesSpider(CrawlSpider):
 					pc_link = 'http://' + url_base
 					print('    visiting: ' + pc_link)
 					self.browser.get(pc_link)
-				finally:
-					self.browser.close()
+				except:
+					pass
 				sleep(self.interval)
 
 				try:
 					m_link = 'http://m.' + url_base
 					print('    visiting: ' + m_link)
 					self.browser.get(m_link)
-				finally:
-					self.browser.close()
+				except:
+					pass
 				sleep(self.interval)
 		
 	parse_start_url = parse_item
