@@ -52,7 +52,7 @@ class ArticlesSpider(scrapy.Spider):
 				'page': self.page,
 				'userid': user_id
 			}
-			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse)
+			yield scrapy.FormRequest(url=self.request_url, formdata=formdata, callback=self.parse)
 
 	def parse(self, response):
 		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
