@@ -12,15 +12,17 @@ from time import sleep
 class ArticlesSpider(CrawlSpider):
 	name = 'articles'
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
+	user_ids = [3652, 3655, 3656, 3657]
+	page = 1
 	start_urls = [
-		'http://www.ieduchina.com/home/3657.html',
-		'http://www.ieduchina.com/home/3656.html',
-		'http://www.ieduchina.com/home/3655.html',
-		'http://www.ieduchina.com/home/3652.html'
+		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652',
+		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3655',
+		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3656',
+		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3657'
 	]
 
 	rules = (
-		Rule(LinkExtractor(allow=(), restrict_xpaths=('//*[@id="pages"]/a[last()]',)),
+		Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="collect-item"]',)),
 			callback="parse_item",
 			follow=True),)
 
@@ -41,25 +43,27 @@ class ArticlesSpider(CrawlSpider):
 
 	def parse_item(self, response):
 		print('[*] ' + response.url)
-		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
-		for a in item_links:
-			m = self.url_pattern.search(a)
-			if m :
-				url_base = m.group(2)
-				try:
-					pc_link = 'http://' + url_base
-					print('    visiting: ' + pc_link)
-					self.browser.get(pc_link)
-				except:
-					pass
-				sleep(self.interval)
+		# item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
+		item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
+		print(item_links)
+		# for a in item_links:
+		# 	m = self.url_pattern.search(a)
+		# 	if m :
+		# 		url_base = m.group(2)
+		# 		try:
+		# 			pc_link = 'http://' + url_base
+		# 			print('    visiting: ' + pc_link)
+		# 			self.browser.get(pc_link)
+		# 		except:
+		# 			pass
+		# 		sleep(self.interval)
 
-				try:
-					m_link = 'http://m.' + url_base
-					print('    visiting: ' + m_link)
-					self.browser.get(m_link)
-				except:
-					pass
-				sleep(self.interval)
+		# 		try:
+		# 			m_link = 'http://m.' + url_base
+		# 			print('    visiting: ' + m_link)
+		# 			self.browser.get(m_link)
+		# 		except:
+		# 			pass
+		# 		sleep(self.interval)
 		
 	parse_start_url = parse_item
