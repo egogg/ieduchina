@@ -16,8 +16,8 @@ class ArticlesSpider(scrapy.Spider):
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
-	pc_counter_url = 'www.ieduchina.com/api.php?'
-	m_counter_url = 'm.ieduchina.com/api.php?'
+	pc_counter_url = 'https://www.ieduchina.com/api.php?'
+	m_counter_url = 'https://m.ieduchina.com/api.php?'
 
 	url_pattern = re.compile(r'^\/\/(.*)(m\.ieduchina\.com)(.*)')
 	article_id_parttern = re.compile(r'^\/\/.*\/([0-9]+).html$')
