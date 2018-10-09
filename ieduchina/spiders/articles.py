@@ -21,6 +21,9 @@ class ArticlesSpider(scrapy.Spider):
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3656',
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3657'
 	# ]
+	start_urls = [
+		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652'
+	]
 
 	# rules = (
 	# 	Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="collect-item"]',)),
