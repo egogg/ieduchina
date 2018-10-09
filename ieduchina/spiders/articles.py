@@ -55,7 +55,7 @@ class ArticlesSpider(scrapy.Spider):
 	def parse(self, response):
 		if response.xpath('//div[@class="collect-item"]'):
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
-			print(item_links)
+			# print(item_links)
 
 			user_id = response.meta['user_id']
 			page = response.meta['page']
