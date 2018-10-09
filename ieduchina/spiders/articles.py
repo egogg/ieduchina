@@ -78,8 +78,8 @@ class ArticlesSpider(scrapy.Spider):
 					counter_params = 'op=count&id=' + article_id + '&modelid=1'
 					pc_request_url = self.pc_counter_url + counter_params
 					m_request_url = self.m_counter_url + counter_params
-					print(pc_counter_url)
-					print(m_counter_url)
+					print(pc_request_url)
+					print(m_request_url)
 
 			formdata = {
 				'page': str(page + 1),
