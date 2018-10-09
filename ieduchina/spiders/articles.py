@@ -26,11 +26,12 @@ class ArticlesSpider(scrapy.Spider):
 	# opts.add_argument("--headless")
 	# browser = webdriver.Firefox(firefox_options = opts)
 
-	def __init__(self, interval = '30', repeat = '1', timeout = '10', *args, **kwargs):
+	def __init__(self, interval = '30', repeat = '1', timeout = '10', 'safe_mode' = '1', *args, **kwargs):
 		super(ArticlesSpider, self).__init__(*args, **kwargs)
 		self.interval = int(interval)
 		self.repeat = int(repeat)
 		self.timeout = int(timeout)
+		self.safe_mode = int(safe_mode)
 
 		# self.start_urls = self.start_urls * self.repeat
 		# self.browser.set_page_load_timeout(self.timeout)
@@ -51,35 +52,36 @@ class ArticlesSpider(scrapy.Spider):
 
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			for a in item_links:
-				m = self.url_pattern.search(a)
-				if m :
-					url_prefix = m.group(1)
-					url_base = m.group(3)
-					try:
-						pc_link = url_prefix + 'ieduchina.com' + url_base
-						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
-						# self.browser.get(pc_link)
-					except:
-						pass
-					# sleep(self.interval)
+				if self.safe_mode > 0 :
+					m = self.url_pattern.search(a)
+					if m :
+						url_prefix = m.group(1)
+						url_base = m.group(3)
+						try:
+							pc_link = url_prefix + 'ieduchina.com' + url_base
+							print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
+							# self.browser.get(pc_link)
+						except:
+							pass
+						# sleep(self.interval)
 
-					try:
-						m_link = url_prefix + 'm.ieduchina.com' + url_base
-						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
-						# self.browser.get(m_link)
-					except:
-						pass
-					# sleep(self.interval)
-
-				id_m = self.article_id_parttern.search(a)
-				if id_m :
-					article_id = id_m.group(1)
-					print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  article id: '+ article_id)
-					counter_params = 'op=count&id=' + article_id + '&modelid=1'
-					pc_request_url = self.pc_counter_url + counter_params
-					m_request_url = self.m_counter_url + counter_params
-					print(pc_request_url)
-					print(m_request_url)
+						try:
+							m_link = url_prefix + 'm.ieduchina.com' + url_base
+							print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
+							# self.browser.get(m_link)
+						except:
+							pass
+						# sleep(self.interval)
+				else :
+					id_m = self.article_id_parttern.search(a)
+					if id_m :
+						article_id = id_m.group(1)
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  article id: '+ article_id)
+						counter_params = 'op=count&id=' + article_id + '&modelid=1'
+						pc_request_url = self.pc_counter_url + counter_params
+						m_request_url = self.m_counter_url + counter_params
+						yield scrapy.Request(url = pc_request_url, callback = None)
+						yield scrapy.Request(url = m_request_url, callback = None)
 
 			formdata = {
 				'page': str(page + 1),
