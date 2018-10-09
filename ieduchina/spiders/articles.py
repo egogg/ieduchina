@@ -43,6 +43,7 @@ class ArticlesSpider(scrapy.Spider):
 		# self.browser.set_page_load_timeout(self.timeout)
 
 	def parse(self, response):
+		print("abc")
 		print('[*] ' + response.url)
 		if self.page == 0 :
 			self.page += 1
