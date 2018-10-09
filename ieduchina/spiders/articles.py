@@ -46,6 +46,16 @@ class ArticlesSpider(CrawlSpider):
 		# item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 		print(item_links)
+
+		if sel.xpath('//div[@class="collect-item"]'):
+			self.page +=1
+			formdata = {
+				'page': self.page,
+				'userid': 3653
+			}
+            yield FormRequest(url=response.url, formdata=formdata, callback=self.parse_item)
+        else:
+            return
 		# for a in item_links:
 		# 	m = self.url_pattern.search(a)
 		# 	if m :
