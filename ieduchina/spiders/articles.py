@@ -53,9 +53,9 @@ class ArticlesSpider(CrawlSpider):
 				'page': self.page,
 				'userid': 3653
 			}
-            yield FormRequest(url=response.url, formdata=formdata, callback=self.parse_item)
-        else:
-            return
+			yield FormRequest(url=response.url, formdata=formdata, callback=self.parse_item)
+		else:
+			return
 		# for a in item_links:
 		# 	m = self.url_pattern.search(a)
 		# 	if m :
