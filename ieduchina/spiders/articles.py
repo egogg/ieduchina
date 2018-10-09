@@ -8,26 +8,14 @@ from scrapy.linkextractors import LinkExtractor
 import re
 # from selenium import webdriver
 from time import sleep
+import datetime
+import time
 
 class ArticlesSpider(scrapy.Spider):
 	name = 'articles'
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
-	# start_urls = [
-	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652',
-	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3655',
-	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3656',
-	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3657'
-	# ]
-	# start_urls = [
-	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652'
-	# ]
-
-	# rules = (
-	# 	Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="collect-item"]',)),
-	# 		callback="parse_item",
-	# 		follow=True),)
 
 	url_pattern = re.compile(r'^(\/\/www\.|\/\/)(.*)')
 
@@ -54,12 +42,31 @@ class ArticlesSpider(scrapy.Spider):
 
 	def parse(self, response):
 		if response.xpath('//div[@class="collect-item"]'):
-			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
-			# print(item_links)
-
 			user_id = response.meta['user_id']
 			page = response.meta['page']
-			print('user_id: ' +  str(user_id) + ' page : ' + str(page))
+			print('[*] visiting user_id: ' +  str(user_id) + ' page : ' + str(page))
+
+			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
+			for a in item_links:
+			m = self.url_pattern.search(a)
+			if m :
+				url_base = m.group(2)
+				try:
+					pc_link = 'http://' + url_base
+					print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
+					# self.browser.get(pc_link)
+				except:
+					pass
+				# sleep(self.interval)
+
+				try:
+					m_link = 'http://m.' + url_base
+					print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] m: ' + m_link)
+					# self.browser.get(m_link)
+				except:
+					pass
+				# sleep(self.interval)
+
 			formdata = {
 				'page': str(page + 1),
 				'userid': str(user_id)
@@ -67,23 +74,4 @@ class ArticlesSpider(scrapy.Spider):
 			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse, meta={'user_id': user_id, 'page' : page + 1})
 		else:
 			return
-		# for a in item_links:
-		# 	m = self.url_pattern.search(a)
-		# 	if m :
-		# 		url_base = m.group(2)
-		# 		try:
-		# 			pc_link = 'http://' + url_base
-		# 			print('    visiting: ' + pc_link)
-		# 			self.browser.get(pc_link)
-		# 		except:
-		# 			pass
-		# 		sleep(self.interval)
-
-		# 		try:
-		# 			m_link = 'http://m.' + url_base
-		# 			print('    visiting: ' + m_link)
-		# 			self.browser.get(m_link)
-		# 		except:
-		# 			pass
-		# 		sleep(self.interval)
 	
