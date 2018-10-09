@@ -14,7 +14,6 @@ class ArticlesSpider(scrapy.Spider):
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
-	page = 1
 	# start_urls = [
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652',
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3655',
@@ -63,7 +62,7 @@ class ArticlesSpider(scrapy.Spider):
 				'page': str(response.meta['page'] + 1),
 				'userid': str(response.meta['user_id'])
 			}
-			yield scrapy.FormRequest(url=self.request_url,  formdata=formdata, callback=self.parse)
+			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse)
 		else:
 			return
 		# for a in item_links:
