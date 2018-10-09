@@ -26,7 +26,7 @@ class ArticlesSpider(scrapy.Spider):
 	# opts.add_argument("--headless")
 	# browser = webdriver.Firefox(firefox_options = opts)
 
-	def __init__(self, interval = '30', repeat = '1', timeout = '10', 'safe_mode' = '1', *args, **kwargs):
+	def __init__(self, interval = '30', repeat = '1', timeout = '10', safe_mode = '1', *args, **kwargs):
 		super(ArticlesSpider, self).__init__(*args, **kwargs)
 		self.interval = int(interval)
 		self.repeat = int(repeat)
