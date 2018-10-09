@@ -9,12 +9,12 @@ import re
 # from selenium import webdriver
 from time import sleep
 
-class ArticlesSpider(scrapy):
+class ArticlesSpider(scrapy.Spider):
 	name = 'articles'
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
-	page = 0
+	page = 1
 	# start_urls = [
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652',
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3655',
