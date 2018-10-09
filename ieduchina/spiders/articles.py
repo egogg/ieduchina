@@ -16,6 +16,8 @@ class ArticlesSpider(scrapy.Spider):
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
+	pc_counter_url = 'www.ieduchina.com/api.php?'
+	m_counter_url = 'm.ieduchina.com/api.php?'
 
 	url_pattern = re.compile(r'^\/\/(.*)(m\.ieduchina\.com)(.*)')
 	article_id_parttern = re.compile(r'^\/\/.*\/([0-9]+).html$')
@@ -72,7 +74,12 @@ class ArticlesSpider(scrapy.Spider):
 				id_m = self.article_id_parttern.search(a)
 				if id_m :
 					article_id = id_m.group(1)
-					print(' ssss: ' + article_id)
+					print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  article id: '+ article_id)
+					counter_params = 'op=count&id=' + article_id + '&modelid=1'
+					pc_request_url = self.pc_counter_url + counter_params
+					m_request_url = self.m_counter_url + counter_params
+					print(pc_counter_url)
+					print(m_counter_url)
 
 			formdata = {
 				'page': str(page + 1),
