@@ -18,6 +18,7 @@ class ArticlesSpider(scrapy.Spider):
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
 
 	url_pattern = re.compile(r'^\/\/(.*)(m\.ieduchina\.com)(.*)')
+	article_id_parttern = re.compille(r'^\/\/.*\/([0-9]+).html$')
 
 	# opts = webdriver.FirefoxOptions()
 	# opts.add_argument("--headless")
@@ -67,6 +68,11 @@ class ArticlesSpider(scrapy.Spider):
 					except:
 						pass
 					# sleep(self.interval)
+
+				id_m = self.article_id_parttern.search(a)
+				if id_m :
+					article_id = id_m.group(1)
+					print(' ssss: ' + article_id)
 
 			formdata = {
 				'page': str(page + 1),
