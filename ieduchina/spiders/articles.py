@@ -48,24 +48,24 @@ class ArticlesSpider(scrapy.Spider):
 
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			for a in item_links:
-			m = self.url_pattern.search(a)
-			if m :
-				url_base = m.group(2)
-				try:
-					pc_link = 'http://' + url_base
-					print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
-					# self.browser.get(pc_link)
-				except:
-					pass
-				# sleep(self.interval)
+				m = self.url_pattern.search(a)
+				if m :
+					url_base = m.group(2)
+					try:
+						pc_link = 'http://' + url_base
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
+						# self.browser.get(pc_link)
+					except:
+						pass
+					# sleep(self.interval)
 
-				try:
-					m_link = 'http://m.' + url_base
-					print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] m: ' + m_link)
-					# self.browser.get(m_link)
-				except:
-					pass
-				# sleep(self.interval)
+					try:
+						m_link = 'http://m.' + url_base
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] m: ' + m_link)
+						# self.browser.get(m_link)
+					except:
+						pass
+					# sleep(self.interval)
 
 			formdata = {
 				'page': str(page + 1),
