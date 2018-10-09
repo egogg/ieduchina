@@ -57,7 +57,7 @@ class ArticlesSpider(scrapy.Spider):
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			print(item_links)
 
-			print('user_id: ' +  response.meta['user_id'] + ' page : ' + response.meta['page'])
+			print('user_id: ' +  str(response.meta['user_id']) + ' page : ' + str(response.meta['page']))
 			formdata = {
 				'page': str(response.meta['page'] + 1),
 				'userid': str(response.meta['user_id'])
