@@ -49,8 +49,8 @@ class ArticlesSpider(scrapy.Spider):
 		for user_id in self.user_ids :
 			self.page = 1
 			formdata = {
-				'page': self.page,
-				'userid': user_id
+				'page': str(self.page),
+				'userid': str(user_id)
 			}
 			yield scrapy.FormRequest(url=self.request_url, formdata=formdata, callback=self.parse)
 
