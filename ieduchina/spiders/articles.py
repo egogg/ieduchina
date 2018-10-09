@@ -47,24 +47,20 @@ class ArticlesSpider(scrapy.Spider):
 
 	def start_requests(self):
 		for user_id in self.user_ids :
-			self.page = 1
 			formdata = {
-				'page': str(self.page),
+				'page': '1',
 				'userid': str(user_id)
 			}
-			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse, meta={'user_id': user_id})
+			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse, meta={'user_id': user_id, 'page' : 1})
 
 	def parse(self, response):
-		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
-		print(item_links)
-
 		if response.xpath('//div[@class="collect-item"]'):
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			print(item_links)
-			print(self.page)
-			self.page += 1
+
+			print('user_id: ' +  response.meta['user_id'] + ' page : ' + response.meta['page'])
 			formdata = {
-				'page': str(self.page),
+				'page': str(response.meta['page'] + 1),
 				'userid': str(response.meta['user_id'])
 			}
 			yield scrapy.FormRequest(url=self.request_url,  formdata=formdata, callback=self.parse)
