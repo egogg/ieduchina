@@ -46,18 +46,15 @@ class ArticlesSpider(scrapy.Spider):
 		# self.browser.set_page_load_timeout(self.timeout)
 
 	def start_requests(self):
-		print("start")
-
-	def parse(self, response):
-		print("abc")
-		print('[*] ' + response.url)
-		if self.page == 0 :
-			self.page += 1
+		for user_id in user_ids :
+			self.page = 1
 			formdata = {
 				'page': 1,
-				'userid': 3653
+				'userid': user_id
 			}
-			yield scrapy.FormRequest(url=response.url, method='POST', formdata=formdata, callback=self.parse)
+			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse)
+
+	def parse(self, response):
 		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		print(item_links)
 
@@ -65,14 +62,13 @@ class ArticlesSpider(scrapy.Spider):
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			print(item_links)
 			print(self.page)
-			self.page +=1
+			self.page += 1
 			formdata = {
 				'page': self.page,
 				'userid': 3653
 			}
 			yield scrapy.FormRequest(url=response.url, method='POST', formdata=formdata, callback=self.parse)
 		else:
-			self.page = 0
 			return
 		# for a in item_links:
 		# 	m = self.url_pattern.search(a)
