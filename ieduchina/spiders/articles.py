@@ -17,7 +17,7 @@ class ArticlesSpider(scrapy.Spider):
 	user_ids = [3652, 3655, 3656, 3657]
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
 
-	url_pattern = re.compile(r'^(\/\/www\.|\/\/)(.*)')
+	url_pattern = re.compile(r'^(\/\/m\.|\/\/)(.*)')
 
 	# opts = webdriver.FirefoxOptions()
 	# opts.add_argument("--headless")
@@ -52,7 +52,7 @@ class ArticlesSpider(scrapy.Spider):
 				if m :
 					url_base = m.group(2)
 					try:
-						pc_link = 'http://' + url_base
+						pc_link = 'http://www.' + url_base
 						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
 						# self.browser.get(pc_link)
 					except:
@@ -61,7 +61,7 @@ class ArticlesSpider(scrapy.Spider):
 
 					try:
 						m_link = 'http://m.' + url_base
-						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] m: ' + m_link)
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
 						# self.browser.get(m_link)
 					except:
 						pass
