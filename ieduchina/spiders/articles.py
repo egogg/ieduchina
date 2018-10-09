@@ -18,7 +18,7 @@ class ArticlesSpider(scrapy.Spider):
 	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
 
 	url_pattern = re.compile(r'^\/\/(.*)(m\.ieduchina\.com)(.*)')
-	article_id_parttern = re.compille(r'^\/\/.*\/([0-9]+).html$')
+	article_id_parttern = re.compile(r'^\/\/.*\/([0-9]+).html$')
 
 	# opts = webdriver.FirefoxOptions()
 	# opts.add_argument("--headless")
