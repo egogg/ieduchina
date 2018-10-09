@@ -45,6 +45,9 @@ class ArticlesSpider(scrapy.Spider):
 		self.start_urls = self.start_urls * self.repeat
 		# self.browser.set_page_load_timeout(self.timeout)
 
+	def start_requests(self):
+		print("start")
+
 	def parse(self, response):
 		print("abc")
 		print('[*] ' + response.url)
