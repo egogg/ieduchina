@@ -6,31 +6,32 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import re
-from selenium import webdriver
+# from selenium import webdriver
 from time import sleep
 
-class ArticlesSpider(CrawlSpider):
+class ArticlesSpider(scrapy.Spider):
 	name = 'articles'
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
-	page = 1
-	start_urls = [
-		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652',
-		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3655',
-		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3656',
-		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3657'
-	]
+	request_url = 'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles'
+	page = 0
+	# start_urls = [
+	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652',
+	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3655',
+	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3656',
+	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3657'
+	# ]
 
-	rules = (
-		Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="collect-item"]',)),
-			callback="parse_item",
-			follow=True),)
+	# rules = (
+	# 	Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="collect-item"]',)),
+	# 		callback="parse_item",
+	# 		follow=True),)
 
 	url_pattern = re.compile(r'^(\/\/www\.|\/\/)(.*)')
 
-	opts = webdriver.FirefoxOptions()
-	opts.add_argument("--headless")
-	browser = webdriver.Firefox(firefox_options = opts)
+	# opts = webdriver.FirefoxOptions()
+	# opts.add_argument("--headless")
+	# browser = webdriver.Firefox(firefox_options = opts)
 
 	def __init__(self, interval = '30', repeat = '1', timeout = '10', *args, **kwargs):
 		super(ArticlesSpider, self).__init__(*args, **kwargs)
@@ -39,22 +40,32 @@ class ArticlesSpider(CrawlSpider):
 		self.timeout = int(timeout)
 
 		self.start_urls = self.start_urls * self.repeat
-		self.browser.set_page_load_timeout(self.timeout)
+		# self.browser.set_page_load_timeout(self.timeout)
 
-	def parse_item(self, response):
+	def parse(self, response):
 		print('[*] ' + response.url)
-		# item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
-		item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
+		if self.page == 0 :
+			self.page += 1
+			formdata = {
+				'page': 1,
+				'userid': 3653
+			}
+			yield scrapy.FormRequest(url=response.url, method='POST', formdata=formdata, callback=self.parse)
+		item_links = response.css('.article_list_con .article_item .article_info h4 a::attr(href)').extract()
 		print(item_links)
 
-		if sel.xpath('//div[@class="collect-item"]'):
+		if response.xpath('//div[@class="collect-item"]'):
+			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
+			print(item_links)
+			print(self.page)
 			self.page +=1
 			formdata = {
 				'page': self.page,
 				'userid': 3653
 			}
-			yield FormRequest(url=response.url, formdata=formdata, callback=self.parse_item)
+			yield scrapy.FormRequest(url=response.url, method='POST', formdata=formdata, callback=self.parse)
 		else:
+			self.page = 0
 			return
 		# for a in item_links:
 		# 	m = self.url_pattern.search(a)
@@ -75,5 +86,4 @@ class ArticlesSpider(CrawlSpider):
 		# 		except:
 		# 			pass
 		# 		sleep(self.interval)
-		
-	parse_start_url = parse_item
+	
