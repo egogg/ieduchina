@@ -21,9 +21,9 @@ class ArticlesSpider(scrapy.Spider):
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3656',
 	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3657'
 	# ]
-	start_urls = [
-		'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652'
-	]
+	# start_urls = [
+	# 	'http://m.ieduchina.com/index.php?m=user&c=home&a=loadarticles&userid=3652'
+	# ]
 
 	# rules = (
 	# 	Rule(LinkExtractor(allow=(), restrict_xpaths=('//div[@class="collect-item"]',)),
@@ -42,7 +42,7 @@ class ArticlesSpider(scrapy.Spider):
 		self.repeat = int(repeat)
 		self.timeout = int(timeout)
 
-		self.start_urls = self.start_urls * self.repeat
+		# self.start_urls = self.start_urls * self.repeat
 		# self.browser.set_page_load_timeout(self.timeout)
 
 	def start_requests(self):
