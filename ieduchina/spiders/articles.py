@@ -9,7 +9,7 @@ import re
 # from selenium import webdriver
 from time import sleep
 
-class ArticlesSpider(scrapy.Spider):
+class ArticlesSpider(scrapy):
 	name = 'articles'
 	allowed_domains = ['www.ieduchina.com', 'm.ieduchina.com']
 	user_ids = [3652, 3655, 3656, 3657]
@@ -49,7 +49,7 @@ class ArticlesSpider(scrapy.Spider):
 		for user_id in self.user_ids :
 			self.page = 1
 			formdata = {
-				'page': 1,
+				'page': self.page,
 				'userid': user_id
 			}
 			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse)
@@ -67,7 +67,7 @@ class ArticlesSpider(scrapy.Spider):
 				'page': self.page,
 				'userid': 3653
 			}
-			yield scrapy.FormRequest(url=response.url, method='POST', formdata=formdata, callback=self.parse)
+			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse)
 		else:
 			return
 		# for a in item_links:
