@@ -46,7 +46,7 @@ class ArticlesSpider(scrapy.Spider):
 		# self.browser.set_page_load_timeout(self.timeout)
 
 	def start_requests(self):
-		for user_id in user_ids :
+		for user_id in self.user_ids :
 			self.page = 1
 			formdata = {
 				'page': 1,
