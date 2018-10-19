@@ -35,13 +35,11 @@ class ArticlesSpider(scrapy.Spider):
 			}
 			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse, meta={'user_id': user_id, 'page' : 1})
 
-		print('end')
-
 	def parse(self, response):
 		if response.xpath('//div[@class="collect-item"]'):
 			user_id = response.meta['user_id']
 			page = response.meta['page']
-			print('[*] visiting user_id: ' +  str(user_id) + ' page : ' + str(page))
+			# print('[*] visiting user_id: ' +  str(user_id) + ' page : ' + str(page))
 
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			for a in item_links:
@@ -80,4 +78,7 @@ class ArticlesSpider(scrapy.Spider):
 			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse, meta={'user_id': user_id, 'page' : page + 1})
 		else:
 			return
+
+	def closed( self, reason ):
+		print("end")
 	
