@@ -45,7 +45,7 @@ class ArticlesSpider(scrapy.Spider):
 
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			for a in item_links:
-				if self.mode == 0 :
+				if self.mode > 0 :
 					m = self.url_pattern.search(a)
 					if m :
 						url_prefix = m.group(1)
@@ -67,6 +67,9 @@ class ArticlesSpider(scrapy.Spider):
 						pc_request_url = self.pc_counter_url + counter_params
 						m_request_url = self.m_counter_url + counter_params
 
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_request_url)
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_request_url)
+						
 						self.urls.append(pc_request_url)
 						self.urls.append(m_request_url)
 
