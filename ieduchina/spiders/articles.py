@@ -85,7 +85,7 @@ class ArticlesSpider(scrapy.Spider):
 		generate_postman_collection(self.article_ids)
 
 
-	def build_postman_item(article_id, pc_mode) :
+	def build_postman_item(self, article_id, pc_mode) :
 		counter_params = 'op=count&id=' + article_id + '&modelid=1'
 		if(pc_mode) :
 			request_url = self.pc_counter_url + counter_params
@@ -132,7 +132,7 @@ class ArticlesSpider(scrapy.Spider):
 
 		return item
 
-	def generate_postman_collection(article_ids) :
+	def generate_postman_collection(self, article_ids) :
 		items = []
 		for article_id in article_ids :
 			items.append(build_postman_item(article_id, True));
