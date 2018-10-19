@@ -6,7 +6,6 @@ import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import re
-from selenium import webdriver
 from time import sleep
 import datetime
 import time
@@ -22,18 +21,11 @@ class ArticlesSpider(scrapy.Spider):
 	url_pattern = re.compile(r'^\/\/(.*)(m\.ieduchina\.com)(.*)')
 	article_id_parttern = re.compile(r'^\/\/.*\/([0-9]+).html$')
 
-	opts = webdriver.FirefoxOptions()
-	opts.add_argument("--headless")
-	browser = webdriver.Firefox(firefox_options = opts)
+	urls = []
 
-	def __init__(self, interval = '30', repeat = '1', timeout = '10', safe_mode = '1', *args, **kwargs):
+	def __init__(self, mode = '0', *args, **kwargs):
 		super(ArticlesSpider, self).__init__(*args, **kwargs)
-		self.interval = int(interval)
-		self.repeat = int(repeat)
-		self.timeout = int(timeout)
-		self.safe_mode = int(safe_mode)
-
-		self.browser.set_page_load_timeout(self.timeout)
+		self.mode = int(mode)
 
 	def start_requests(self):
 		for user_id in self.user_ids :
@@ -43,6 +35,8 @@ class ArticlesSpider(scrapy.Spider):
 			}
 			yield scrapy.FormRequest(url=self.request_url, method='POST', formdata=formdata, callback=self.parse, meta={'user_id': user_id, 'page' : 1})
 
+		print('end')
+
 	def parse(self, response):
 		if response.xpath('//div[@class="collect-item"]'):
 			user_id = response.meta['user_id']
@@ -51,29 +45,20 @@ class ArticlesSpider(scrapy.Spider):
 
 			item_links = response.css('div.collect-item h3.title a::attr(href)').extract()
 			for a in item_links:
-				if self.safe_mode > 0 :
+				if self.mode == 0 :
 					m = self.url_pattern.search(a)
 					if m :
 						url_prefix = m.group(1)
 						url_base = m.group(3)
-						for i in range(self.repeat):
-							try:
-								pc_link = url_prefix + 'ieduchina.com' + url_base
-								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
-								self.browser.get(pc_link)
-								self.browser.close()
-							except:
-								pass
-							sleep(self.interval)
 
-							try:
-								m_link = url_prefix + 'm.ieduchina.com' + url_base
-								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
-								self.browser.get(m_link)
-								self.browser.close()
-							except:
-								pass
-							sleep(self.interval)
+						pc_link = url_prefix + 'ieduchina.com' + url_base
+						m_link = url_prefix + 'm.ieduchina.com' + url_base
+
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
+						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
+						
+						urls.append(pc_link)
+						urls.append(m_link)
 				else :
 					id_m = self.article_id_parttern.search(a)
 					if id_m :
@@ -81,24 +66,6 @@ class ArticlesSpider(scrapy.Spider):
 						counter_params = 'op=count&id=' + article_id + '&modelid=1'
 						pc_request_url = self.pc_counter_url + counter_params
 						m_request_url = self.m_counter_url + counter_params
-
-						for i in range(self.repeat):
-							try:
-								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_request_url)
-								self.browser.get(pc_request_url)
-								self.browser.close()
-							except:
-								pass
-							sleep(self.interval)
-
-							try:
-								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_request_url)
-								self.browser.get(m_request_url)
-								self.browser.close()
-							except:
-								pass
-							sleep(self.interval)
-							
 
 			formdata = {
 				'page': str(page + 1),
