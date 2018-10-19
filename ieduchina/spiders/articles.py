@@ -9,6 +9,7 @@ import re
 from time import sleep
 import datetime
 import time
+import json
 
 class ArticlesSpider(scrapy.Spider):
 	name = 'articles'
