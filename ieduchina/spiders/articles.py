@@ -82,7 +82,7 @@ class ArticlesSpider(scrapy.Spider):
 			return
 
 	def closed( self, reason ):
-		generate_postman_collection(self.article_ids)
+		self.generate_postman_collection(self.article_ids)
 
 
 	def build_postman_item(self, article_id, pc_mode) :
@@ -135,8 +135,8 @@ class ArticlesSpider(scrapy.Spider):
 	def generate_postman_collection(self, article_ids) :
 		items = []
 		for article_id in article_ids :
-			items.append(build_postman_item(article_id, True));
-			items.append(build_postman_item(article_id, False));
+			items.append(self.build_postman_item(article_id, True));
+			items.append(self.build_postman_item(article_id, False));
 
 		data = {
 			"info" : {
