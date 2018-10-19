@@ -81,4 +81,5 @@ class ArticlesSpider(scrapy.Spider):
 
 	def closed( self, reason ):
 		print("end")
+		print(self.urls)
 	
