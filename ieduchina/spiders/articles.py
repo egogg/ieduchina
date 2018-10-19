@@ -90,8 +90,11 @@ class ArticlesSpider(scrapy.Spider):
 		counter_params = 'op=count&id=' + article_id + '&modelid=1'
 		if(pc_mode) :
 			request_url = self.pc_counter_url + counter_params
+			host_protocal = "www"
 		else:
 			request_url = self.m_counter_url + counter_params
+			host_protocal = "m"
+
 		item = {
 			"name": article_id,
 			"request": {
@@ -105,7 +108,7 @@ class ArticlesSpider(scrapy.Spider):
 					"raw": request_url,
 					"protocol": "https",
 					"host": [
-						"www",
+						host_protocal,
 						"ieduchina",
 						"com"
 					],
