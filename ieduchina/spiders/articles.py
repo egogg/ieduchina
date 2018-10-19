@@ -67,8 +67,8 @@ class ArticlesSpider(scrapy.Spider):
 						pc_request_url = self.pc_counter_url + counter_params
 						m_request_url = self.m_counter_url + counter_params
 
-						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_request_url)
-						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_request_url)
+						# print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_request_url)
+						# print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_request_url)
 						
 						self.urls.append(pc_request_url)
 						self.urls.append(m_request_url)
