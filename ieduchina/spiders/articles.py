@@ -61,6 +61,7 @@ class ArticlesSpider(scrapy.Spider):
 								pc_link = url_prefix + 'ieduchina.com' + url_base
 								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
 								self.browser.get(pc_link)
+								self.browser.close()
 							except:
 								pass
 							sleep(self.interval)
@@ -69,6 +70,7 @@ class ArticlesSpider(scrapy.Spider):
 								m_link = url_prefix + 'm.ieduchina.com' + url_base
 								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
 								self.browser.get(m_link)
+								self.browser.close()
 							except:
 								pass
 							sleep(self.interval)
@@ -84,6 +86,7 @@ class ArticlesSpider(scrapy.Spider):
 							try:
 								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_request_url)
 								self.browser.get(pc_request_url)
+								self.browser.close()
 							except:
 								pass
 							sleep(self.interval)
@@ -91,6 +94,7 @@ class ArticlesSpider(scrapy.Spider):
 							try:
 								print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_request_url)
 								self.browser.get(m_request_url)
+								self.browser.close()
 							except:
 								pass
 							sleep(self.interval)
