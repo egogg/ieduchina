@@ -57,8 +57,8 @@ class ArticlesSpider(scrapy.Spider):
 						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + '] pc: ' + pc_link)
 						print('    [' + datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S') + ']  m: ' + m_link)
 						
-						urls.append(pc_link)
-						urls.append(m_link)
+						self.urls.append(pc_link)
+						self.urls.append(m_link)
 				else :
 					id_m = self.article_id_parttern.search(a)
 					if id_m :
@@ -66,6 +66,9 @@ class ArticlesSpider(scrapy.Spider):
 						counter_params = 'op=count&id=' + article_id + '&modelid=1'
 						pc_request_url = self.pc_counter_url + counter_params
 						m_request_url = self.m_counter_url + counter_params
+
+						self.urls.append(pc_request_url)
+						self.urls.append(m_request_url)
 
 			formdata = {
 				'page': str(page + 1),
